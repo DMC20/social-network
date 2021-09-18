@@ -2,10 +2,11 @@
   "name": "social-network",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "nodemon server.js",
   "dependencies": {
     "express": "^4.17.1",
-    "mongoose": "^6.0.6"
+    "mongoose": "^6.0.6",
+    "nodemon": "^2.0.12"
   },
   "devDependencies": {},
   "scripts": {

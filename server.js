@@ -9,11 +9,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(require('./routes'));
 
-mongoose.connect(process.env.MONGODB_URI || 'mongod://localhost/social-network', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/social-network', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 
 mongoose.set('debug', true);
 
-app.listen(PORT, () => {console.log('And we are live!')}); 
+app.listen(PORT, () => {console.log('And...we are live!')}); 
