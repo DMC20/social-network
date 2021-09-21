@@ -14,9 +14,9 @@ const thoughtController = {
         res.status(400).json(err)})
     },
     getThoughtById({ params }, res) {
-        Thought.findOne({ _id: params,id })
+        Thought.findOne({ _id: params.id })
         .populate({
-            path: 'user',
+            path: 'reactions',
             select: '-__v'
         })
         .select('-__v')
@@ -71,7 +71,7 @@ const thoughtController = {
             { $addToSet: { reactions:body } },
             {new: true, runValidators: true }
         )
-        .then( dbThought => {
+        .then(dbThought => {
             if (!dbThought) {
                 res.status(404).json({ message: 'Nothing found '})
                 return;

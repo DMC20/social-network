@@ -13,8 +13,8 @@ const userController = {
         .populate({
             path: 'thoughts',
             select: '-__v'
-        },
-        {
+        })
+        .populate({
             path: 'friends',
             select: '-__v'
         })
@@ -60,7 +60,7 @@ const userController = {
     },
     addFriend({ params }, res) {
         User.findOneAndUpdate(
-            { _id: params.id},
+            { _id: params.userId},
             { $addToSet: { friends: params.friendsId } },
             { new: true, runValidators: true }
         )
@@ -69,7 +69,19 @@ const userController = {
                 res.status(404).json({ message: 'No user found' })
                 return;
             }
-            res.json(dbUser)
+            User.findOneAndUpdate(
+                { _id: params.friendsId },
+                { $addToSet: { friends: params.userId } },
+                { new: true, runValidators: true }
+            )
+            .then(dbData => {
+                if (!dbData) {
+                    res.status(404).json({ message: 'No user found' })
+                    return;
+                }
+                res.json(dbData)
+            })
+            .catch(err => res.json(err))
         })
         .catch(err => res.json(err));
     },
@@ -79,14 +91,26 @@ const userController = {
             {$pull: { friends: params.friendsId } },
             { new: true, runValidators: true }
         )
-        .then(dbUser => {
-            if (!dbUser) {
-                res.status(404).json({ message: 'No user found' })
+        .then(dbData => {
+            if (!dbData) {
+                res.status(404).json({ message: 'NO user found '})
                 return;
             }
-            res.json(dbUser)
-        })
-        .catch(err => res.json(err));
+                User.findOneAndUpdate(
+                { _id: params.friendId },
+                { $pull: { friends: params.userId } },
+                { new: true, runValidators: true }
+                )
+                .then(dbUser => {
+                    if (!dbUser) {
+                        res.status(404).json({ message: 'NO user found '})
+                        return; 
+                    }
+                    res.json(dbUser)
+                })
+                .catch(err => res.json(err))
+        }) 
+        .catch(err => res.json(err))
     }
  };
 
