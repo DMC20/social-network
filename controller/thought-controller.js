@@ -10,19 +10,13 @@ const thoughtController = {
         .select('-__v')
         .sort({ _id: -1 })
         .then(dbThought => res.json(dbThought))
-        .catch(err => {console.log(err);
-        res.status(400).json(err)})
+        .catch(err => {res.status(400).json(err)})
     },
     getThoughtById({ params }, res) {
         Thought.findOne({ _id: params.id })
-        .populate({
-            path: 'reactions',
-            select: '-__v'
-        })
         .select('-__v')
         .then(dbThought => res.json(dbThought))
-        .catch(err => {console.log(err);
-        res.status(400).json(err)})
+        .catch(err => {res.status(400).json(err)})
     },
     createThought({ body }, res) {
         Thought.create(body)
@@ -34,7 +28,7 @@ const thoughtController = {
             )
             .then(dbUser => {
                 if (!dbUser) {
-                    res.status(404).json({ message: 'No user found with this id!' });
+                    res.status(404).json({ message: 'Nothing found' });
                     return;
                 }
                 res.json(dbUser);
