@@ -44,7 +44,7 @@ const thoughtController = {
         .catch(err => res.json(err));
     },
     updateThought({ params, body}, res) {
-        Thought.findOneAndDelete({ _id: params.id }, body, { new: true, runValidators: true })
+        Thought.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
         .then(dbThought => {
             if (!dbThought) {
                 res.status(404).json({ message: 'Nothing found'})
@@ -68,7 +68,7 @@ const thoughtController = {
     addReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId},
-            { $addToSet: { reactions: body } },
+            { $push: { reactions: body } },
             { new: true, runValidators: true }
         )
         .then(dbThought => {
@@ -78,7 +78,9 @@ const thoughtController = {
             }
             res.json(dbThought)
         })
-        .cstch(err => res.json(err));
+        .catch((err) =>{ 
+            res.json(err)
+        });
     },
     deleteReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
@@ -91,7 +93,7 @@ const thoughtController = {
                 res.status(404).json({ message: 'Nothing found' });
                 return;
             }
-            res.json(dbThought);
+            res.json('All gone!');
         })
         .catch(err => res.json(err));
     },
